@@ -1,0 +1,21 @@
+{
+  "name": "cordova-deploy",
+  "version": "0.0.1",
+  "description": "Command line tools to help deploy Cordova applications to users",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cordova",
+    "deploy"
+  ],
+  "author": "Josh Bavari (jbavari@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "~2.2.0",
+    "cordova": "~3.5.0-0.2.4",
+    "colors": "~0.6.2",
+    "execSync": "~1.0.1-pre"
+  }
+}
