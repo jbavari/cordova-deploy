@@ -3,11 +3,11 @@
  */
 
 var program = require('commander');
-var deployHockeyAppToAndroid = require('./lib/hockey-deploy');
+var hockeyAppDeploys = require('./lib/hockey-deploy');
 var colors = require('colors');
 
-console.log(deployHockeyAppToAndroid);
-deployHockeyAppToAndroid();
+console.log(hockeyAppDeploys);
+hockeyAppDeploys.deployAndroidBuild();
 
 program
   .version('0.0.1')
