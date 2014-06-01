@@ -1,10 +1,16 @@
+#!/usr/bin/env node
+
+'use strict';
+
+process.title = 'cordova-deploy';
+
 /**
  * Module dependencies.
  */
 
 var program = require('commander');
-var builder = require('./lib/builder');
-var hockeyAppDeploys = require('./lib/hockey-deploy');
+var builder = require('../lib/builder');
+var hockeyAppDeploys = require('../lib/hockey-deploy');
 var colors = require('colors');
 var basedir = process.cwd();
 
@@ -41,6 +47,7 @@ if(program.build) {
 	if(program.ios) {
 		console.log('Building iOS');
 		builder.buildIos(program.name);
+		builder.buildIpa(program.name);
 	}
 }
 

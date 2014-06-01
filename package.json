@@ -10,6 +10,9 @@
     "cordova",
     "deploy"
   ],
+  "bin": {
+    "cordova-deploy": "bin/cordova-deploy"
+  },
   "author": "Josh Bavari (jbavari@gmail.com)",
   "license": "MIT",
   "dependencies": {
