@@ -11,6 +11,7 @@ var program = require('commander');
 var builder = require('../lib/builder');
 var path = require('path');
 var hockeyAppDeploys = require('../lib/hockey-deploy');
+var testFlightDeploys = require('../lib/testflight-deploy');
 var configReader = require('../lib/config-reader');
 var colors = require('colors');
 var basedir = process.cwd();
@@ -28,6 +29,11 @@ var androidId = null;
 var iosId = null;
 var cordovaConfig = null;
 var hockeyConfig = null;
+var testFlightConfig = null;
+var apiToken = null;
+var teamToken = null;
+var notes = null;
+var distlist = null;
 
 program
   .version('0.0.1')
@@ -35,24 +41,35 @@ program
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
   .option('-h, --hockey', 'Deploy to HockeyApp (Requires HockeyApp API Key and HockeyApp App ID\'s)')
-  .option('-c, --hconfig', 'HockeyApp configuration file location (contains your HockeyApp API key, iOS App ID, and Android App ID')
+  .option('-t, --testflight', 'Deploy iOS version to TestFlight (Requires API token, Team Token)')
+  // .option('-c, --hconfig', 'HockeyApp configuration file location (contains your HockeyApp API key, iOS App ID, and Android App ID')
   .option('-p, --ipa <path>', 'iOS IPA File Location')
   .option('-y, --dsym <path>', 'iOS dSYM File Location')
   .option('-j, --apk <path>', 'Andoid APK File Location')
   .option('-k, --apikey <key>', 'HockeyApp API Key')
   .option('-d, --andid <id>', 'HockeyApp Android App ID')
   .option('-s, --iosid <id>', 'HockeyApp iOS App ID')
+  .option('-o, --apitoken <token>', 'TestFlight API Token')
+  .option('-e, --teamtoken <token>', 'TestFlight API Token')
   .option('-n, --name <id>', 'Cordova App Name')
+  .option('-c, --notes <note>', 'Release notes for the deploy')
+  .option('-l, --distlist <command delimited list of groups>', 'TestFlight API Token')
   // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
   .parse(process.argv);
 
 var appName = program.name || configReader.readCordovaConfig();
+
+notes = program.notes;
+distlist = program.distlist;
 
 // configReader.readCordovaConfig().done(function(data){
 	// cordovaConfig = data;
 // });
 
 hockeyConfig = configReader.readHockeyConfig();
+testFlightConfig = configReader.readTestFlightConfig();
+
+console.log('Testflight config: ' + JSON.stringify(testFlightConfig));
 
 
 // if (program.android) console.log('  - Android');
@@ -76,6 +93,26 @@ if(hockeyConfig) {
 	apiKey = program.apikey;
 	iosId = program.iosid;
 	androidId = program.andid;
+}
+
+if(testFlightConfig) {
+	apiToken = testFlightConfig.api_token;
+	teamToken = testFlightConfig.team_token;
+} else {
+	apiToken = program.apitoken;
+	teamToken = program.teamtoken;
+}
+
+if(program.notes) {
+	notes = program.notes;
+} else {
+	notes = 'Deploy from cordova-deploy on ' + (new Date());
+}
+
+if(program.distlist) {
+	distlist = program.distlist;
+} else {
+	distlist = 'Testers';
 }
 
 
@@ -126,4 +163,21 @@ if(program.hockey){
 			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId);
 		}
 	}
+}
+
+if(program.testflight) {
+	console.log('testflight');
+
+	if(typeof apiKey == 'undefined') {
+		console.log('You did not supply a Test Flight API Token - you cannot proceed.'.red.bold);
+		return;
+	}
+
+	if(typeof teamToken == 'undefined') {
+		console.log('You did not supply a Test Flight Team Token - you cannot proceed.'.red.bold);
+		return;	
+	}
+
+	testFlightDeploys.deployIos(apiToken, teamToken, ipaPath, dsymPath, notes, distlist);
+
 }
