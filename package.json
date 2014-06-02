@@ -19,6 +19,7 @@
     "commander": "~2.2.0",
     "cordova": "~3.5.0-0.2.4",
     "colors": "~0.6.2",
-    "execSync": "~1.0.1-pre"
+    "execSync": "~1.0.1-pre",
+    "elementtree": "~0.1.6"
   }
 }

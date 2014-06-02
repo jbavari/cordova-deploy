@@ -7,9 +7,9 @@ process.title = 'cordova-deploy';
 /**
  * Module dependencies.
  */
-
 var program = require('commander');
 var builder = require('../lib/builder');
+var path = require('path');
 var hockeyAppDeploys = require('../lib/hockey-deploy');
 var configReader = require('../lib/config-reader');
 var colors = require('colors');
@@ -21,10 +21,12 @@ var basedir = process.cwd();
 var appName = null;
 var appPath = null;
 var ipaPath = null;
+var dsymPath = null;
 var apkPath = null;
 var apiKey = null;
 var androidId = null;
 var iosId = null;
+var cordovaConfig = null;
 var hockeyConfig = null;
 
 program
@@ -44,31 +46,52 @@ program
   // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
   .parse(process.argv);
 
-// console.log('progam name: ' + program.name);
+var appName = program.name || configReader.readCordovaConfig();
+
+// configReader.readCordovaConfig().done(function(data){
+	// cordovaConfig = data;
+// });
 
 hockeyConfig = configReader.readHockeyConfig();
-// console.log('YO CONFIG!: ' + config.api_key);
 
 
 // if (program.android) console.log('  - Android');
 // if (program.ios) console.log('  - iOS');
 var somethingToBuild = typeof program.android != 'undefined' || typeof program.ios != 'undefined';
-console.log('progam name: ' + program.name);
 
 if(!somethingToBuild) {
 	console.log('cordova-deploy - You have not chosen anything to build or deploy a platform. Aborting'.red.bold);
 	return;
 }
 
+apkPath = program.apk ? program.apk : path.join(process.cwd(), 'platforms', 'android', 'ant-build', appName + '-debug.apk');
+
+if(hockeyConfig) {
+	// console.log('We have a hockey config cool!');
+	// console.log(hockeyConfig);
+	apiKey = hockeyConfig.api_key;
+	iosId = hockeyConfig.ios_app_id;
+	androidId = hockeyConfig.android_app_id;
+} else {
+	apiKey = program.apikey;
+	iosId = program.iosid;
+	androidId = program.andid;
+}
+
 
 if(program.build) {
 	if(program.ios) {
-		console.log('Building iOS');
-		appPath = builder.buildIos(program.name);
-		ipaPath = builder.buildIpa(program.name);
+		var appBuild = builder.buildIos(appName);
+		appPath = appBuild.app;
+		dsymPath = appBuild.dsym;
+		ipaPath = builder.buildIpa(appName);
 		console.log('iOS application information:');
 		console.log('\tApp path: ' + appPath);
 		console.log('\tIPA path: ' + ipaPath);
+	}
+
+	if(program.android) {
+		apkPath = builder.buildAndroid(appName);
 	}
 }
 
@@ -77,18 +100,30 @@ if(program.ipa) {
 }
 if(program.dsym) {
 	dsymPath = program.dsym;
+} else {
+	//We assume it will be in the build folder from cordova build command
+	dsymPath = path.join(process.cwd(), 'platforms', 'ios', 'build', 'device', appName + '.app.dSYM');
 }
 
 if(program.hockey){
-	if(program.android && (typeof program.andid == 'undefined' || typeof program.apikey == 'undefined')) {
-		console.log('Cannot Deploy Android - You must supply both the HockeyApp API Key and the HockeyApp Android App ID.')
-	} else {
-		hockeyAppDeploys.deployAndroidBuild(program.apikey, program.andid, program.apk);
+	if(typeof apiKey == 'undefined' ) {
+		console.log('You do not have a HockeyApp API Key set - you cannot proceed'.red.bold);
+		return;
 	}
 
-	if(program.ios && (typeof program.apikey == 'undefined' || typeof program.iosid)) {
-		console.log('Cannot Deploy iOS - You must supply both the HockeyApp API Key and the HockeyApp iOS App ID')
-	} else {
-		hockeyAppDeploys.deployIosBuild(program.apikey, program.ipa, program.dsym, program.iosid)
+	if(program.android) {
+		if(typeof androidId == 'undefined') {
+			console.log('Cannot Deploy Android - You must supply both the HockeyApp API Key and the HockeyApp Android App ID.')
+		} else {
+			hockeyAppDeploys.deployAndroidBuild(apiKey, apkPath, androidId);
+		}
+	}
+
+	if(program.ios) {
+		if(typeof iosId == 'undefined') {
+			console.log('Cannot Deploy iOS - You must supply both the HockeyApp API Key and the HockeyApp iOS App ID')
+		} else {
+			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId);
+		}
 	}
 }
