@@ -60,4 +60,9 @@ Then your command to build and deploy looks more like this:
 
 `cordova-deploy --build --ios --testflight`
 
+Additional Information
+===========
+
+This project was inspired by [Mattt Thompson's](https://twitter.com/mattt) [Nomad-CLI tools for iOS](http://nomad-cli.com/). I wanted a flavor that I could use for my Cordova projects and give me flexibility to go to TestFlight, HockeyApp, and other destinations in the future.
+
 Enjoy!
