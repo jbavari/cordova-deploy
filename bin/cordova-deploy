@@ -11,8 +11,21 @@ process.title = 'cordova-deploy';
 var program = require('commander');
 var builder = require('../lib/builder');
 var hockeyAppDeploys = require('../lib/hockey-deploy');
+var configReader = require('../lib/config-reader');
 var colors = require('colors');
 var basedir = process.cwd();
+
+/**
+ * App vars
+ */
+var appName = null;
+var appPath = null;
+var ipaPath = null;
+var apkPath = null;
+var apiKey = null;
+var androidId = null;
+var iosId = null;
+var hockeyConfig = null;
 
 program
   .version('0.0.1')
@@ -20,6 +33,7 @@ program
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
   .option('-h, --hockey', 'Deploy to HockeyApp (Requires HockeyApp API Key and HockeyApp App ID\'s)')
+  .option('-c, --hconfig', 'HockeyApp configuration file location (contains your HockeyApp API key, iOS App ID, and Android App ID')
   .option('-p, --ipa <path>', 'iOS IPA File Location')
   .option('-y, --dsym <path>', 'iOS dSYM File Location')
   .option('-j, --apk <path>', 'Andoid APK File Location')
@@ -30,7 +44,11 @@ program
   // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
   .parse(process.argv);
 
-console.log('progam name: ' + program.name);
+// console.log('progam name: ' + program.name);
+
+hockeyConfig = configReader.readHockeyConfig();
+// console.log('YO CONFIG!: ' + config.api_key);
+
 
 // if (program.android) console.log('  - Android');
 // if (program.ios) console.log('  - iOS');
@@ -46,9 +64,19 @@ if(!somethingToBuild) {
 if(program.build) {
 	if(program.ios) {
 		console.log('Building iOS');
-		builder.buildIos(program.name);
-		builder.buildIpa(program.name);
+		appPath = builder.buildIos(program.name);
+		ipaPath = builder.buildIpa(program.name);
+		console.log('iOS application information:');
+		console.log('\tApp path: ' + appPath);
+		console.log('\tIPA path: ' + ipaPath);
 	}
+}
+
+if(program.ipa) {
+	ipaPath = program.ipa;
+}
+if(program.dsym) {
+	dsymPath = program.dsym;
 }
 
 if(program.hockey){
