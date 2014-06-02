@@ -27,7 +27,11 @@
   "bin": {
     "cordova-deploy": "bin/cordova-deploy"
   },
-  "author": "Josh Bavari (jbavari@gmail.com)",
+  "author": {
+    "name": "Josh Bavari",
+    "email": "jbavari@gmail.com",
+    "url" : "http://jbavari.github.io"
+  },
   "license": "MIT",
   "dependencies": {
     "commander": "~2.2.0",
