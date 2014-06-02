@@ -2,7 +2,21 @@
   "name": "cordova-deploy",
   "version": "0.0.1",
   "description": "Command line tools to help deploy Cordova applications to users",
-  "main": "index.js",
+  "repository" : { 
+    "type" : "git",
+    "url" : "https://github.com/jbavari/cordova-deploy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jbavari/cordova-deploy/issues",
+    "email": "jbavari@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Josh Bavari",
+      "email": "jbavari@gmail.com",
+      "url": "http://jbavari.github.io"
+    }
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
