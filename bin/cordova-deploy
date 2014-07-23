@@ -168,7 +168,7 @@ if(program.hockey){
 if(program.testflight) {
 	console.log('testflight');
 
-	if(typeof apiKey == 'undefined') {
+	if(typeof apiToken == 'undefined') {
 		console.log('You did not supply a Test Flight API Token - you cannot proceed.'.red.bold);
 		return;
 	}
