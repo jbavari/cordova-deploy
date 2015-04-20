@@ -11,7 +11,6 @@ var program = require('commander');
 var builder = require('../lib/builder');
 var path = require('path');
 var hockeyAppDeploys = require('../lib/hockey-deploy');
-var testFlightDeploys = require('../lib/testflight-deploy');
 var configReader = require('../lib/config-reader');
 var colors = require('colors');
 var basedir = process.cwd();
@@ -163,21 +162,4 @@ if(program.hockey){
 			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId);
 		}
 	}
-}
-
-if(program.testflight) {
-	console.log('testflight');
-
-	if(typeof apiToken == 'undefined') {
-		console.log('You did not supply a Test Flight API Token - you cannot proceed.'.red.bold);
-		return;
-	}
-
-	if(typeof teamToken == 'undefined') {
-		console.log('You did not supply a Test Flight Team Token - you cannot proceed.'.red.bold);
-		return;	
-	}
-
-	testFlightDeploys.deployIos(apiToken, teamToken, ipaPath, dsymPath, notes, distlist);
-
 }
