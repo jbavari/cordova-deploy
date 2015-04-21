@@ -28,19 +28,17 @@ var androidId = null;
 var iosId = null;
 var cordovaConfig = null;
 var hockeyConfig = null;
-var testFlightConfig = null;
 var apiToken = null;
 var teamToken = null;
 var notes = null;
 var distlist = null;
 
 program
-  .version('0.0.1')
+  .version('0.0.2')
   .option('-b, --build', 'Build Applications (Requires Android or iOS Flag)')
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
   .option('-h, --hockey', 'Deploy to HockeyApp (Requires HockeyApp API Key and HockeyApp App ID\'s)')
-  .option('-t, --testflight', 'Deploy iOS version to TestFlight (Requires API token, Team Token)')
   // .option('-c, --hconfig', 'HockeyApp configuration file location (contains your HockeyApp API key, iOS App ID, and Android App ID')
   .option('-p, --ipa <path>', 'iOS IPA File Location')
   .option('-y, --dsym <path>', 'iOS dSYM File Location')
@@ -48,11 +46,8 @@ program
   .option('-k, --apikey <key>', 'HockeyApp API Key')
   .option('-d, --andid <id>', 'HockeyApp Android App ID')
   .option('-s, --iosid <id>', 'HockeyApp iOS App ID')
-  .option('-o, --apitoken <token>', 'TestFlight API Token')
-  .option('-e, --teamtoken <token>', 'TestFlight API Token')
   .option('-n, --name <id>', 'Cordova App Name')
   .option('-c, --notes <note>', 'Release notes for the deploy')
-  .option('-l, --distlist <command delimited list of groups>', 'TestFlight API Token')
   // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
   .parse(process.argv);
 
@@ -66,10 +61,6 @@ distlist = program.distlist;
 // });
 
 hockeyConfig = configReader.readHockeyConfig();
-testFlightConfig = configReader.readTestFlightConfig();
-
-console.log('Testflight config: ' + JSON.stringify(testFlightConfig));
-
 
 // if (program.android) console.log('  - Android');
 // if (program.ios) console.log('  - iOS');
@@ -92,14 +83,6 @@ if(hockeyConfig) {
 	apiKey = program.apikey;
 	iosId = program.iosid;
 	androidId = program.andid;
-}
-
-if(testFlightConfig) {
-	apiToken = testFlightConfig.api_token;
-	teamToken = testFlightConfig.team_token;
-} else {
-	apiToken = program.apitoken;
-	teamToken = program.teamtoken;
 }
 
 if(program.notes) {

@@ -4,11 +4,7 @@
   "description": "Command line tools to help deploy Cordova applications to users",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jbavari/cordova-deploy.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jbavari/cordova-deploy/issues",
-    "email": "jbavari@gmail.com"
+    "url": "https://github.com/bamlab/cordova-deploy.git"
   },
   "contributors": [
     {
@@ -26,7 +22,8 @@
   },
   "keywords": [
     "cordova",
-    "deploy"
+    "deploy",
+    "hockeyapp"
   ],
   "bin": {
     "cordova-deploy": "bin/cordova-deploy"
@@ -42,5 +39,5 @@
     "cordova": "~3.5.0-0.2.4",
     "colors": "~0.6.2",
     "elementtree": "~0.1.6"
-  },
+  }
 }
