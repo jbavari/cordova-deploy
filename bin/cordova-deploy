@@ -32,6 +32,7 @@ var apiToken = null;
 var teamToken = null;
 var notes = null;
 var distlist = null;
+var deployConfig = null;
 
 program
   .version('0.0.2')
