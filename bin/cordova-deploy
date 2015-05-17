@@ -39,7 +39,6 @@ program
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
   .option('-h, --hockey', 'Deploy to HockeyApp (Requires HockeyApp API Key and HockeyApp App ID\'s)')
-  // .option('-c, --hconfig', 'HockeyApp configuration file location (contains your HockeyApp API key, iOS App ID, and Android App ID')
   .option('-p, --ipa <path>', 'iOS IPA File Location')
   .option('-y, --dsym <path>', 'iOS dSYM File Location')
   .option('-j, --apk <path>', 'Andoid APK File Location')
@@ -48,7 +47,6 @@ program
   .option('-s, --iosid <id>', 'HockeyApp iOS App ID')
   .option('-n, --name <id>', 'Cordova App Name')
   .option('-c, --notes <note>', 'Release notes for the deploy')
-  // .option('-c, --cheese [type]', 'Add the specified type of cheese [marble]', 'marble')
   .parse(process.argv);
 
 var appName = program.name || configReader.readCordovaConfig();
@@ -56,14 +54,8 @@ var appName = program.name || configReader.readCordovaConfig();
 notes = program.notes;
 distlist = program.distlist;
 
-// configReader.readCordovaConfig().done(function(data){
-	// cordovaConfig = data;
-// });
-
 hockeyConfig = configReader.readHockeyConfig();
 
-// if (program.android) console.log('  - Android');
-// if (program.ios) console.log('  - iOS');
 var somethingToBuild = typeof program.android != 'undefined' || typeof program.ios != 'undefined';
 
 if(!somethingToBuild) {
@@ -74,8 +66,6 @@ if(!somethingToBuild) {
 apkPath = program.apk ? program.apk : path.join(process.cwd(), 'platforms', 'android', 'ant-build', appName + '-debug.apk');
 
 if(hockeyConfig) {
-	// console.log('We have a hockey config cool!');
-	// console.log(hockeyConfig);
 	apiKey = hockeyConfig.api_key;
 	iosId = hockeyConfig.ios_app_id;
 	androidId = hockeyConfig.android_app_id;
