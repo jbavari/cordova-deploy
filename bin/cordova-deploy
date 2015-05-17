@@ -46,12 +46,12 @@ program
   .option('-d, --andid <id>', 'HockeyApp Android App ID')
   .option('-s, --iosid <id>', 'HockeyApp iOS App ID')
   .option('-n, --name <id>', 'Cordova App Name')
+  .option('-N, --notify', 'Notify that a new build is available')
   .option('-c, --notes <note>', 'Release notes for the deploy')
   .parse(process.argv);
 
 var appName = program.name || configReader.readCordovaConfig();
 
-notes = program.notes;
 distlist = program.distlist;
 
 hockeyConfig = configReader.readHockeyConfig();
@@ -78,7 +78,7 @@ if(hockeyConfig) {
 if(program.notes) {
 	notes = program.notes;
 } else {
-	notes = 'Deploy from cordova-deploy on ' + (new Date());
+	notes = 'Some new features and fixed bugs.';
 }
 
 if(program.distlist) {
@@ -115,6 +115,11 @@ if(program.dsym) {
 }
 
 if(program.hockey){
+  deployConfig = {
+    notes: notes
+    notify: program.notify ? 1 : 0
+  }
+
 	if(typeof apiKey == 'undefined' ) {
 		console.log('You do not have a HockeyApp API Key set - you cannot proceed'.red.bold);
 		return;
@@ -124,7 +129,7 @@ if(program.hockey){
 		if(typeof androidId == 'undefined') {
 			console.log('Cannot Deploy Android - You must supply both the HockeyApp API Key and the HockeyApp Android App ID.')
 		} else {
-			hockeyAppDeploys.deployAndroidBuild(apiKey, apkPath, androidId);
+			hockeyAppDeploys.deployAndroidBuild(apiKey, apkPath, androidId, deployConfig);
 		}
 	}
 
@@ -132,7 +137,7 @@ if(program.hockey){
 		if(typeof iosId == 'undefined') {
 			console.log('Cannot Deploy iOS - You must supply both the HockeyApp API Key and the HockeyApp iOS App ID')
 		} else {
-			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId);
+			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId, deployConfig);
 		}
 	}
 }
