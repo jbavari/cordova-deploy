@@ -38,7 +38,6 @@ program
   .option('-b, --build', 'Build Applications (Requires Android or iOS Flag)')
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
-  .option('-h, --hockey', 'Deploy to HockeyApp (Requires HockeyApp API Key and HockeyApp App ID\'s)')
   .option('-p, --ipa <path>', 'iOS IPA File Location')
   .option('-y, --dsym <path>', 'iOS dSYM File Location')
   .option('-j, --apk <path>', 'Andoid APK File Location')
@@ -114,30 +113,28 @@ if(program.dsym) {
 	dsymPath = path.join(process.cwd(), 'platforms', 'ios', 'build', 'device', appName + '.app.dSYM');
 }
 
-if(program.hockey){
-  deployConfig = {
-    notes: notes,
-    notify: program.notify ? 1 : 0
-  }
+deployConfig = {
+  notes: notes,
+  notify: program.notify ? 1 : 0
+}
 
-	if(typeof apiKey == 'undefined' ) {
-		console.log('You do not have a HockeyApp API Key set - you cannot proceed'.red.bold);
-		return;
+if(typeof apiKey == 'undefined' ) {
+	console.log('You do not have a HockeyApp API Key set - you cannot proceed'.red.bold);
+	return;
+}
+
+if(program.android) {
+	if(typeof androidId == 'undefined') {
+		console.log('Cannot Deploy Android - You must supply both the HockeyApp API Key and the HockeyApp Android App ID.')
+	} else {
+		hockeyAppDeploys.deployAndroidBuild(apiKey, apkPath, androidId, deployConfig);
 	}
+}
 
-	if(program.android) {
-		if(typeof androidId == 'undefined') {
-			console.log('Cannot Deploy Android - You must supply both the HockeyApp API Key and the HockeyApp Android App ID.')
-		} else {
-			hockeyAppDeploys.deployAndroidBuild(apiKey, apkPath, androidId, deployConfig);
-		}
-	}
-
-	if(program.ios) {
-		if(typeof iosId == 'undefined') {
-			console.log('Cannot Deploy iOS - You must supply both the HockeyApp API Key and the HockeyApp iOS App ID')
-		} else {
-			hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId, deployConfig);
-		}
+if(program.ios) {
+	if(typeof iosId == 'undefined') {
+		console.log('Cannot Deploy iOS - You must supply both the HockeyApp API Key and the HockeyApp iOS App ID')
+	} else {
+		hockeyAppDeploys.deployIosBuild(apiKey, ipaPath, dsymPath, iosId, deployConfig);
 	}
 }
