@@ -116,7 +116,7 @@ if(program.dsym) {
 
 if(program.hockey){
   deployConfig = {
-    notes: notes
+    notes: notes,
     notify: program.notify ? 1 : 0
   }
 

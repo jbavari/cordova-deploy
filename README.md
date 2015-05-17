@@ -7,7 +7,10 @@ Command line tools to help deploy your Cordova application to your users.
 
 Installation
 ============
-npm install -g cordova-deploy
+
+```
+npm install -g bamlab/cordova-deploy
+```
 
 Application Config
 ============
