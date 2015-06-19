@@ -1,20 +1,20 @@
 {
   "name": "cordova-deploy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Command line tools to help deploy Cordova applications to users",
-  "repository" : { 
-    "type" : "git",
-    "url" : "https://github.com/jbavari/cordova-deploy.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jbavari/cordova-deploy/issues",
-    "email": "jbavari@gmail.com"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bamlab/cordova-deploy.git"
   },
   "contributors": [
     {
       "name": "Josh Bavari",
       "email": "jbavari@gmail.com",
       "url": "http://jbavari.github.io"
+    },
+    {
+      "name": "Yann Leflour",
+      "email": "yannl@bamlab.fr"
     }
   ],
   "scripts": {
@@ -22,7 +22,8 @@
   },
   "keywords": [
     "cordova",
-    "deploy"
+    "deploy",
+    "hockeyapp"
   ],
   "bin": {
     "cordova-deploy": "bin/cordova-deploy"
@@ -30,14 +31,15 @@
   "author": {
     "name": "Josh Bavari",
     "email": "jbavari@gmail.com",
-    "url" : "http://jbavari.github.io"
+    "url": "http://jbavari.github.io"
   },
   "license": "MIT",
   "dependencies": {
     "commander": "~2.2.0",
-    "cordova": "~3.5.0-0.2.4",
     "colors": "~0.6.2",
-    "execSync": "~1.0.1-pre",
     "elementtree": "~0.1.6"
+  },
+  "engines": {
+    "node": "v0.12.x"
   }
 }

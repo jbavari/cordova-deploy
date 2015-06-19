@@ -9,7 +9,7 @@ var colors = require('colors');
 var basedir = process.cwd();
 
 program
-  .version('0.0.1')
+  .version('0.0.2')
   .option('-b, --build', 'Build Applications (Requires Android or iOS Flag)')
   .option('-a, --android', 'Deploy Android (Requires APK File Location)')
   .option('-i, --ios', 'Deploy iOS (Requires iOS IPA and iOS dSYM File Locations)')
