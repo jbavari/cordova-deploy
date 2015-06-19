@@ -63,7 +63,17 @@ if(!somethingToBuild) {
 	return;
 }
 
-apkPath = program.apk ? program.apk : path.join(process.cwd(), 'platforms', 'android', 'ant-build', appName + '-debug.apk');
+//Select correct path for Android
+if(program.apk) {
+  //Parameter overrides config + default
+  apkPath = program.apk;
+} else if (hockeyConfig.apk) {
+  //Config overrides default
+  apkPath = hockeyConfig.apk;
+} else {
+  //Defaults to unsigned apk build
+  apkPath = path.join(process.cwd(), 'platforms', 'android', 'build', 'outputs', 'apk', 'android-release-unsigned.apk');
+}
 
 if(hockeyConfig) {
 	apiKey = hockeyConfig.api_key;
@@ -100,7 +110,7 @@ if(program.build) {
 	}
 
 	if(program.android) {
-		apkPath = builder.buildAndroid(appName);
+		builder.buildAndroid(appName);
 	}
 }
 
