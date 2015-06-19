@@ -72,7 +72,7 @@ if(program.apk) {
   apkPath = hockeyConfig.apk;
 } else {
   //Defaults to unsigned apk build
-  path.join(process.cwd(), 'platforms', 'android', 'build', 'outputs', 'apk', 'android-release-unsigned.apk');
+  apkPath = path.join(process.cwd(), 'platforms', 'android', 'build', 'outputs', 'apk', 'android-release-unsigned.apk');
 }
 
 if(hockeyConfig) {
@@ -110,7 +110,7 @@ if(program.build) {
 	}
 
 	if(program.android) {
-		apkPath = builder.buildAndroid(appName);
+		builder.buildAndroid(appName);
 	}
 }
 
